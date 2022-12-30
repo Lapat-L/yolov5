@@ -1,5 +1,6 @@
 window.onload = () => {
   $("#sendbutton").click(() => {
+    $("#link").css("visibility", "hidden");
     imagebox = $("#imagebox");
     link = $("#link");
     input = $("#imageinput")[0];

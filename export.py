@@ -310,7 +310,7 @@ def export_saved_model(model,
                        topk_per_class=100,
                        topk_all=100,
                        iou_thres=0.45,
-                       conf_thres=0.25,
+                       conf_thres=0.80,
                        keras=False,
                        prefix=colorstr('TensorFlow SavedModel:')):
     # YOLOv5 TensorFlow SavedModel export
@@ -510,7 +510,7 @@ def run(
         topk_per_class=100,  # TF.js NMS: topk per class to keep
         topk_all=100,  # TF.js NMS: topk for all classes to keep
         iou_thres=0.45,  # TF.js NMS: IoU threshold
-        conf_thres=0.25,  # TF.js NMS: confidence threshold
+        conf_thres=0.80,  # TF.js NMS: confidence threshold
 ):
     t = time.time()
     include = [x.lower() for x in include]  # to lowercase

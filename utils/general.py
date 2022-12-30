@@ -923,7 +923,7 @@ def save_one_box(xyxy, im, file='image.jpg', gain=1.02, pad=10, square=False, BG
 
 def non_max_suppression(
         prediction,
-        conf_thres=0.25,
+        conf_thres=0.80,
         iou_thres=0.45,
         classes=None,
         agnostic=False,
