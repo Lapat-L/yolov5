@@ -5,6 +5,9 @@ window.onload = () => {
     link = $("#link");
     input = $("#imageinput")[0];
     if (input.files && input.files[0]) {
+      $('#spinner').css("display", "block");
+      document.body.style.pointerEvents = "none";
+      $('#back').css("display", "block");
       let formData = new FormData();
       formData.append("video", input.files[0]);
       $.ajax({
@@ -17,6 +20,9 @@ window.onload = () => {
         error: function (data) {
           console.log("upload error", data);
           console.log(data.getAllResponseHeaders());
+          document.body.style.pointerEvents = "auto";
+          $('#spinner').css("display", "none");
+          $('#back').css("display", "none");
         },
         success: function (data) {
           console.log(data);
@@ -24,24 +30,26 @@ window.onload = () => {
           // image = bytestring.split("'")[1];
           $("#link").css("visibility", "visible");
           $("#download").attr("href", "static/" + data);
-          console.log(data);
+          document.body.style.pointerEvents = "auto";
+          $('#spinner').css("display", "none");
+          $('#back').css("display", "none");
         },
       });
     }
   });
-  $("#opencam").click(() => {
-    console.log("evoked openCam");
-    $.ajax({
-      url: "/opencam",
-      type: "GET",
-      error: function (data) {
-        console.log("upload error", data);
-      },
-      success: function (data) {
-        console.log(data);
-      }
-    });
-  })
+//   $("#opencam").click(() => {
+//     console.log("evoked openCam");
+//     $.ajax({
+//       url: "/opencam",
+//       type: "GET",
+//       error: function (data) {
+//         console.log("upload error", data);
+//       },
+//       success: function (data) {
+//         console.log(data);
+//       }
+//     });
+//   })
 };
 
 function readUrl(input) {
@@ -62,9 +70,9 @@ function readUrl(input) {
 }
 
 
-function openCam(e){
-  console.log("evoked openCam");
-  e.preventDefault();
-  console.log("evoked openCam");
-  console.log(e);
-}
+// function openCam(e){
+//   console.log("evoked openCam");
+//   e.preventDefault();
+//   console.log("evoked openCam");
+//   console.log(e);
+// }

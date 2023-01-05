@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>YOLO-Object Detection</title>
+    <title>Prostate Cancer Detection</title>
     <link rel="stylesheet" type="text/css" href="../static/index.css" />
     <script
       src="https://code.jquery.com/jquery-3.3.1.min.js"
@@ -13,30 +13,38 @@
   <body>
     <div class="App">
       <header class="App-header">
-        <p><u> Object Detection - YOLO </u></p>
-        <!-- <div className="pre_img">
-          <span><img id="imagebox" src="" /></span>
+        <div id="back" style="display: none;">
+        </div>
+          <p><u> Prostate Cancer Detection </u></p>
+          <!-- <div className="pre_img">
+            <span><img id="imagebox" src="" /></span>
         </div> -->
-        <!-- <video width="320" height="240" controls>
+          <!-- <video width="320" height="240" controls>
           <source src="/static/video_1.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video> -->
-        <button name="cam" class="button" id="opencam">Video Cam</button>
-        <br/>
-        <hr class="line" />
-        <form>
-          <input
-            id="imageinput"
-            type="file"
-            name="image"
-            onchange="readUrl(this)"
+          <!-- <button name="cam" class="button" id="opencam">Video Cam</button>
+          <br/>
+          <hr class="line" /> -->
+          <form>
+            <input
+              id="imageinput"
+              type="file"
+              name="image"
+              onchange="readUrl(this)"
+            />
+          </form>
+          <button name="send" class="button" id="sendbutton">Detect</button>
+          <div id="link">
+            <a href="" id="download" download>Download</a>
+          </div>
+        <div id="spinner" style="display: none;">
+          <img
+            src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif"
+            alt="Loading"
           />
-        </form>
-        <button name="send"  class="button" id="sendbutton">Send</button>
-        <br/>
-        <div id="link">
-          <a href="" id="download" download>Download</a>
         </div>
+        <br />
       </header>
     </div>
   </body>
