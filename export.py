@@ -632,7 +632,7 @@ def parse_opt():
     parser.add_argument('--topk-per-class', type=int, default=100, help='TF.js NMS: topk per class to keep')
     parser.add_argument('--topk-all', type=int, default=100, help='TF.js NMS: topk for all classes to keep')
     parser.add_argument('--iou-thres', type=float, default=0.45, help='TF.js NMS: IoU threshold')
-    parser.add_argument('--conf-thres', type=float, default=0.25, help='TF.js NMS: confidence threshold')
+    parser.add_argument('--conf-thres', type=float, default=0.80, help='TF.js NMS: confidence threshold')
     parser.add_argument(
         '--include',
         nargs='+',
