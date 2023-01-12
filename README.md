@@ -1,5 +1,7 @@
 ## <div align="center">YOLOv5</div>
 
+#### Github Repository: https://github.com/Lapat-L/yolov5 
+
 <details open>
 <summary>Install and Run</summary>
 
