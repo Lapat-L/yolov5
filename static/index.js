@@ -29,6 +29,7 @@ window.onload = () => {
           // image = bytestring.split("'")[1];
           $("#link").css("visibility", "visible");
           $("#download").attr("href", "static/" + data);
+          document.getElementById("download").click();
           document.body.style.pointerEvents = "auto";
           $('#spinner').css("display", "none");
           $('#back').css("display", "none");
@@ -59,7 +60,7 @@ function readUrl(input) {
     let reader = new FileReader();
     reader.onload = function (e) {
       console.log(e.target);
-
+      document.getElementById("upload").textContent = input.files[0].name;
       // imagebox.attr("src", e.target.result);
       // imagebox.height(500);
       // imagebox.width(800);
