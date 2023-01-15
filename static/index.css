@@ -40,9 +40,18 @@ html {
   margin: 10px 40px;
 }
 
-p {
-  margin: 50px;
-  font-size: 72px;
+.header {
+  margin: 30px 30px 0px 30px;
+  font-size: 44px;
+  font-weight: bold;
+  font-family: "Roboto Slab", sans-serif;
+}
+
+.sub {
+  font-size: 16px;
+  margin-top: 5px;
+  margin-bottom: 30px;
+  font-family: "Roboto Slab", sans-serif;
 }
 
 #link {
@@ -59,19 +68,56 @@ p {
   margin-top: 15px;
 }
 
-.button {
-  background-color: white; /* Green */
-  border: none;
+.draw-border {
+  box-shadow: inset 0 0 0 4px black;
   color: black;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  border-style: solid;
-  border-width: thin;
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  margin-bottom: 30px;
+  transition: color 0.25s 0.0833333333s;
+  position: relative;
+}
+.draw-border::before, .draw-border::after {
+  border: 0 solid transparent;
+  box-sizing: border-box;
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  width: 0;
+  height: 0;
+  bottom: 0;
+  right: 0;
+}
+.draw-border::before {
+  border-bottom-width: 4px;
+  border-left-width: 4px;
+}
+.draw-border::after {
+  border-top-width: 4px;
+  border-right-width: 4px;
+}
+.draw-border:hover {
+  color: #FFA7A0;
+}
+.draw-border:hover::before, .draw-border:hover::after {
+  border-color: #FFA7A0;
+  transition: border-color 0s, width 0.25s, height 0.25s;
+  width: 100%;
+  height: 100%;
+}
+.draw-border:hover::before {
+  transition-delay: 0s, 0s, 0.25s;
+}
+.draw-border:hover::after {
+  transition-delay: 0s, 0.25s, 0s;
+}
+
+.btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  line-height: 1.5;
+  font: 700 1.2rem "Roboto Slab", sans-serif;
+  padding: 10px 20px;
+  letter-spacing: 0.05rem;
+  margin-bottom: 8px;
 }
 
 .line{
@@ -86,6 +132,11 @@ p {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1000;
+}
+
+#upload {
+  font-size: 20px;
+  font-family: "Roboto Slab", sans-serif;
 }
 
 #back {
@@ -111,8 +162,8 @@ p {
 }
 
 .inputfile-4 + label figure {
-  width: 100px;
-  height: 100px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   background-color: #d3394c;
   display: block;
@@ -143,6 +194,7 @@ p {
 
 .box {
   margin: 30px;
+  margin-bottom: 15px;
 }
 
 .center {
