@@ -63,6 +63,7 @@ html {
   visibility: hidden;
   margin-bottom: 8px;
   font-size: 16px;
+  font-family: "Roboto Slab", sans-serif;
 }
 
 .draw-border {
