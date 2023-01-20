@@ -7,6 +7,9 @@ import argparse
 import sys
 import time
 from pathlib import Path
+import os
+import shutil
+import zipfile
 
 import cv2
 import torch
@@ -61,7 +64,11 @@ def run(weights='best.pt',  # model.pt path(s)
     set_logging()
     device = select_device(device)
     half &= device.type != 'cpu'  # half precision only supported on CUDA
-
+    zip = ""
+    zip_dir = "" 
+    type = ""
+    total = 0.00
+    count = 0
     # Load model
     w = weights[0] if isinstance(weights, list) else weights
     classify, pt, onnx = False, w.endswith('.pt'), w.endswith('.onnx')  # inference type
@@ -96,6 +103,8 @@ def run(weights='best.pt',  # model.pt path(s)
     if pt and device.type != 'cpu':
         model(torch.zeros(1, 3, imgsz, imgsz).to(device).type_as(next(model.parameters())))  # run once
     t0 = time.time()
+    
+    new = False
     for path, img, im0s, vid_cap in dataset:
         if pt:
             img = torch.from_numpy(img).to(device)
@@ -130,7 +139,13 @@ def run(weights='best.pt',  # model.pt path(s)
                 p, s, im0, frame = path, '', im0s.copy(), getattr(dataset, 'frame', 0)
 
             p = Path(p)  # to Path
-            save_path = str(save_dir / p.name)  # img.jpg
+            dir_name = p.name.split(".")[0] + "-report"
+            zip = dir_name
+            dir_name = str(save_dir / dir_name)
+            zip_dir = dir_name
+            # img_path = str(save_dir / p.name)
+            save_path = str(save_dir / p.name) # img.jpg
+            # save_path = os.path.join(dir_name, p.name)
             txt_path = str(save_dir / 'labels' / p.stem) + ('' if dataset.mode == 'image' else f'_{frame}')  # img.txt
             s += '%gx%g ' % img.shape[2:]  # print string
             gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]  # normalization gain whwh
@@ -158,10 +173,18 @@ def run(weights='best.pt',  # model.pt path(s)
                         plot_one_box(xyxy, im0, label=label, color=colors(c, True), line_thickness=line_thickness)
                         if save_crop:
                             save_one_box(xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
-
+                    total += float(label.split(" ")[1])
+                    count += 1
             # Print time (inference + NMS)
             print(f'{s}Done. ({t2 - t1:.3f}s)')
-
+                        
+            if not new and dataset.mode != 'image':
+                new = True
+                if os.path.exists(dir_name):
+                    shutil.rmtree(dir_name)
+                os.makedirs(dir_name)
+            if os.path.exists(zip_dir+".zip"):
+                os.remove(zip_dir+".zip")
             # Stream results
             if view_img:
                 cv2.imshow(str(p), im0)
@@ -171,7 +194,12 @@ def run(weights='best.pt',  # model.pt path(s)
             if save_img:
                 if dataset.mode == 'image':
                     cv2.imwrite(save_path, im0)
+                    type = "img"
                 else:  # 'video' or 'stream'
+                    if frame % 250 == 1:
+                        if "cancer" in s:
+                            snap_name = "capture-" + str((frame//250)+1) + ".png"
+                            cv2.imwrite(os.path.join(dir_name, snap_name), im0)
                     if vid_path[i] != save_path:  # new video
                         vid_path[i] = save_path
                         if isinstance(vid_writer[i], cv2.VideoWriter):
@@ -192,7 +220,16 @@ def run(weights='best.pt',  # model.pt path(s)
 
     if update:
         strip_optimizer(weights)  # update model (to fix SourceChangeWarning)
-
+    # count the number cancer detect of each frame
+    print(count)
+    # sum of cancer percent that detect
+    print(total)
+    # Average
+    print(f'Average: {"{:.2f}".format(total/count)}')
+    if type != "img":
+        writeText(zip_dir, "Average percentage of detected is " + "{:.2f}".format(total/count))
+        zipfolder(zip, zip_dir)
+        
     print(f'Done. ({time.time() - t0:.3f}s)')
 
 
@@ -231,6 +268,17 @@ def main(opt):
     check_requirements(exclude=('tensorboard', 'thop'))
     run(**vars(opt))
 
+def zipfolder(foldername, target_dir):
+    zipobj = zipfile.ZipFile(target_dir + '.zip', 'w', zipfile.ZIP_STORED)
+    rootlen = len(target_dir) + 1
+    for base, dirs, files in os.walk(target_dir):
+        for file in files:
+            fn = os.path.join(base, file)
+            zipobj.write(fn, fn[rootlen:])
+    zipobj.close()
+def writeText(target_dir, text):
+    with open(os.path.join(target_dir,"report.txt"), 'w') as f:
+        f.write(text)
 
 if __name__ == "__main__":
     opt = parse_opt()

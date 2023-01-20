@@ -23,7 +23,6 @@ def detect():
     video = request.files['video']
     video.save(os.path.join(uploads_dir, secure_filename(video.filename)))
     print(video)
-    subprocess.run("ls", shell=True)
     subprocess.run(['python', 'detect.py', '--source', os.path.join(uploads_dir, secure_filename(video.filename))], shell=True)
 
     # return os.path.join(uploads_dir, secure_filename(video.filename))

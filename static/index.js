@@ -1,6 +1,7 @@
 window.onload = () => {
   $("#sendbutton").click(() => {
     $("#link").css("visibility", "hidden");
+    $("#show").css("visibility", "hidden");
     link = $("#link");
     input = $("#imageinput")[0];
     if (input.files && input.files[0]) {
@@ -25,6 +26,11 @@ window.onload = () => {
         },
         success: function (data) {
           console.log(data);
+          if (input.files[0].type.includes("video")){
+            snap = data.split(".")[0] + "-report.zip"; 
+            $("#report").attr("href", "static/" + snap);
+            $("#show").css("visibility", "visible");
+          }
           // bytestring = data["status"];
           // image = bytestring.split("'")[1];
           $("#link").css("visibility", "visible");

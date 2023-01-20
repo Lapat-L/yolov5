@@ -56,16 +56,13 @@ html {
 
 #link {
   visibility: hidden;
-  margin-top: 15px;
+  margin-top: 0px;
 }
 
 #show {
-  margin-top: 15px;
-}
-
-#show1 {
   visibility: hidden;
-  margin-top: 15px;
+  margin-bottom: 8px;
+  font-size: 16px;
 }
 
 .draw-border {
