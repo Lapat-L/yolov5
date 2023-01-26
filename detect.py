@@ -10,6 +10,7 @@ from pathlib import Path
 import os
 import shutil
 import zipfile
+from datetime import datetime
 
 import cv2
 import torch
@@ -69,6 +70,8 @@ def run(weights='best.pt',  # model.pt path(s)
     type = ""
     total = 0.00
     count = 0
+    now  = datetime.now()
+    start = now.strftime("%H:%M:%S")
     # Load model
     w = weights[0] if isinstance(weights, list) else weights
     classify, pt, onnx = False, w.endswith('.pt'), w.endswith('.onnx')  # inference type
@@ -221,13 +224,15 @@ def run(weights='best.pt',  # model.pt path(s)
     if update:
         strip_optimizer(weights)  # update model (to fix SourceChangeWarning)
     # count the number cancer detect of each frame
+    end = now.strftime("%H:%M:%S")
     print(count)
     # sum of cancer percent that detect
     print(total)
     # Average
-    print(f'Average: {"{:.2f}".format(total/count)}')
+    print(f'Average: {"{:.3f}".format(total/count)}')
     if type != "img":
-        writeText(zip_dir, "Average percentage of detected is " + "{:.2f}".format(total/count))
+        report = "Average of detected is " + "{:.3f}".format(total/count) + "\nThe detection start at " + start + "\nThe detection finish at " + end
+        writeText(zip_dir, report)
         zipfolder(zip, zip_dir)
         
     print(f'Done. ({time.time() - t0:.3f}s)')
