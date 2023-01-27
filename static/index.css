@@ -25,7 +25,9 @@ html {
   /* background-color: white; */
 }
 
-
+body {
+  margin: 0;
+}
 
 #pre {
   background-color: #4caf50; /* Green */

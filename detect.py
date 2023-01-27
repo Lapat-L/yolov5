@@ -72,6 +72,7 @@ def run(weights='best.pt',  # model.pt path(s)
     count = 0
     now  = datetime.now()
     start = now.strftime("%H:%M:%S")
+    cap_frame = 1
     # Load model
     w = weights[0] if isinstance(weights, list) else weights
     classify, pt, onnx = False, w.endswith('.pt'), w.endswith('.onnx')  # inference type
@@ -201,8 +202,9 @@ def run(weights='best.pt',  # model.pt path(s)
                 else:  # 'video' or 'stream'
                     if frame % 250 == 1:
                         if "cancer" in s:
-                            snap_name = "capture-" + str((frame//250)+1) + ".png"
+                            snap_name = "capture-" + str(cap_frame) + ".png"
                             cv2.imwrite(os.path.join(dir_name, snap_name), im0)
+                            cap_frame += 1
                     if vid_path[i] != save_path:  # new video
                         vid_path[i] = save_path
                         if isinstance(vid_writer[i], cv2.VideoWriter):
