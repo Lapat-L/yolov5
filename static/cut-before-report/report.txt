@@ -1,3 +1,3 @@
 Average of detected is 0.911
-The detection start at 12:17:30
-The detection finish at 12:17:30
+The detection start at 19:30:00
+The detection finish at 19:30:54

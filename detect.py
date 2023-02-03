@@ -226,6 +226,7 @@ def run(weights='best.pt',  # model.pt path(s)
     if update:
         strip_optimizer(weights)  # update model (to fix SourceChangeWarning)
     # count the number cancer detect of each frame
+    now  = datetime.now()
     end = now.strftime("%H:%M:%S")
     print(count)
     # sum of cancer percent that detect
