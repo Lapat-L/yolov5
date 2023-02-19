@@ -30,7 +30,7 @@ from utils.torch_utils import select_device, load_classifier, time_sync
 @torch.no_grad()
 def run(weights='best.pt',  # model.pt path(s)
         source='data/images',  # file/dir/URL/glob, 0 for webcam
-        imgsz=640,  # inference size (pixels)
+        imgsz=416,  # inference size (pixels)
         conf_thres=0.80,  # confidence threshold
         iou_thres=0.45,  # NMS IOU threshold
         max_det=1000,  # maximum detections per image
