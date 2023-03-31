@@ -1,4 +1,0 @@
-Average of detected is 0.897
-The first time that found at 0:00:00.036496
-The detection start at 16:21:28
-The detection finish at 16:22:23

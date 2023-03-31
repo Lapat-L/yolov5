@@ -1,0 +1,5 @@
+Average of detected is 0.897
+Found at 0:00:00
+Found at 0:00:09
+The detection start at 17:44:46
+The detection finish at 17:47:15

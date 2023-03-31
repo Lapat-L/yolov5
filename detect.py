@@ -77,6 +77,9 @@ def run(weights='best.pt',  # model.pt path(s)
     cap_frame = 1
     video_time = get_length(source)
     first_frame = 0
+    not_found_count = 0
+    track = []
+    cap_frame = 1
     # Load model
     w = weights[0] if isinstance(weights, list) else weights
     classify, pt, onnx = False, w.endswith('.pt'), w.endswith('.onnx')  # inference type
@@ -204,13 +207,24 @@ def run(weights='best.pt',  # model.pt path(s)
                     cv2.imwrite(save_path, im0)
                     type = "img"
                 else:  # 'video' or 'stream'
-                    if first_frame == 0:
+                    if first_frame == 0 and "cancer" in s:
+                        track.append(frame)
                         first_frame = frame
-                    if frame % 250 == 1:
-                        if "cancer" in s:
-                            snap_name = "capture-" + str(cap_frame) + ".png"
-                            cv2.imwrite(os.path.join(dir_name, snap_name), im0)
-                            cap_frame += 1
+                        snap_name = "capture-" + str(cap_frame) + ".png"
+                        cv2.imwrite(os.path.join(dir_name, snap_name), im0)
+                        cap_frame += 1
+                    elif not_found_count >= 60 and "cancer" in s:
+                        track.append(frame)
+                        first_frame = frame
+                        snap_name = "capture-" + str(cap_frame) + ".png"
+                        cv2.imwrite(os.path.join(dir_name, snap_name), im0)
+                        cap_frame += 1
+                    
+                    if "cancer" in s:
+                        not_found_count = 0
+                    else:
+                        not_found_count += 1
+                        
                     if vid_path[i] != save_path:  # new video
                         vid_path[i] = save_path
                         if isinstance(vid_writer[i], cv2.VideoWriter):
@@ -225,7 +239,7 @@ def run(weights='best.pt',  # model.pt path(s)
                         vid_writer[i] = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
                     vid_writer[i].write(im0)
                     
-    first_time = video_time*first_frame/frame
+    duration_per_frame = video_time/frame
 
     if save_txt or save_img:
         s = f"\n{len(list(save_dir.glob('labels/*.txt')))} labels saved to {save_dir / 'labels'}" if save_txt else ''
@@ -236,13 +250,15 @@ def run(weights='best.pt',  # model.pt path(s)
     # count the number cancer detect of each frame
     now  = datetime.now()
     end = now.strftime("%H:%M:%S")
-    print(first_time)
     # sum of cancer percent that detect
     print(total)
     # Average
     print(f'Average: {"{:.3f}".format(total/count)}')
     if type != "img":
-        report = "Average of detected is " + "{:.3f}".format(total/count) + "\nThe first time that found at " + str(first_time) + "\nThe detection start at " + start + "\nThe detection finish at " + end
+        report = ""
+        for x in track:
+            report = report + "\nFound at " + str(x*duration_per_frame).split(".")[0]
+        report = "Average of detected is " + "{:.3f}".format(total/count) + report + "\nThe detection start at " + start + "\nThe detection finish at " + end
         writeText(zip_dir, report)
         zipfolder(zip, zip_dir)
         
